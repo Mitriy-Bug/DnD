@@ -1,6 +1,6 @@
-import Tooltip from "./main";
-new Tooltip();
+import Game from "./main";
+const game = new Game();
 test("jsdom", () => {
-  const container = document.querySelector(".container");
+  const container = document.querySelector(".containerGame");
   expect(container).toBeNull();
 });

@@ -1,3 +1,5 @@
 // TODO: write code here
-import Tooltip from "./main";
-new Tooltip();
+import Game from "./main";
+const game = new Game();
+// game.setupGoblins();
+// game.UserClick();
