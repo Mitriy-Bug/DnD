@@ -42,7 +42,7 @@ export default class Trello {
   }
   allCards() {
     this.formAddCard = document.querySelector('.form-add-card');
-    window.addEventListener("DOMContentLoaded", (event) => {
+    window.addEventListener("DOMContentLoaded", () => {
       formAddCard.addEventListener('submit', (form) => {
         form.preventDefault();
         this.addCard(form, formAddCard.parentElement)
