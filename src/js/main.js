@@ -16,7 +16,6 @@ export default class Trello {
       } else if(idCard == 'done'){
         col = this.CardsDone;
       }
-      console.log(idCard)
       const cardBody = col.querySelector('.card-body')
        const newCard = document.createElement('div');
        newCard.classList.add("card-item");
@@ -43,13 +42,20 @@ export default class Trello {
   }
   allCards() {
     this.formAddCard = document.querySelector('.form-add-card');
-    this.formAddCard.addEventListener('submit', (form)=> {
-      form.preventDefault();
-      this.addCard(form, this.formAddCard.parentElement)
+    window.addEventListener("DOMContentLoaded", (event) => {
+      formAddCard.addEventListener('submit', (form) => {
+        form.preventDefault();
+        this.addCard(form, formAddCard.parentElement)
+        this.closeFormAddCard = formAddCard.querySelector('.btn-close');
+        this.btnClose = '<button type="button" class="btn btn-remove border-r6">✖</button>'
+        //закрытие формы ко клику
+        this.closeFormAddCard.addEventListener("click", () => {
+          this.formAddCard.classList.add("d-none");
+          e.target.classList.remove("d-none");
+        })
+      })
     })
-    this.closeFormAddCard = this.formAddCard.querySelector('.btn-close');
 
-    this.btnClose = '<button type="button" class="btn btn-remove border-r6">✖</button>'
 
     this.allItems(this.CardsTodo)
     this.allItems(this.CardsProgress)
@@ -58,23 +64,22 @@ export default class Trello {
     this.deleteCard()//Удаление карточки
   }
   allItems(nameCard) {
-    const mainCard = nameCard;
-    const btnAddCard= mainCard.querySelector(".add-card");
+    window.addEventListener("DOMContentLoaded", (event) => {
+    let mainCard = nameCard;
+    let btnAddCard = mainCard.querySelector(".add-card");
 
-   btnAddCard.addEventListener("click", (e) => {
+    btnAddCard.addEventListener("click", (e) => {
 
-    document.querySelectorAll(".add-card").forEach((item) => {item.classList.remove("d-none")})
+      document.querySelectorAll(".add-card").forEach((item) => {
+        item.classList.remove("d-none")
+      })
       e.target.classList.add("d-none");
       this.formAddCard.classList.remove("d-none");
       this.formAddCard.reset()
-     mainCard.append(this.formAddCard)
+      mainCard.append(this.formAddCard)
 
-      //закрытие формы ко клику
-      this.closeFormAddCard.addEventListener("click", () => {
-        this.formAddCard.classList.add("d-none");
-        e.target.classList.remove("d-none");
-      })
     })
+  })
   }
   addCard(addForm, parent) {
     //console.log(parent)
@@ -112,7 +117,5 @@ export default class Trello {
 
         this.addBtnDeleteCard()//Добавление кнопки удаления карточки
         this.deleteCard()//Удаление карточки
-
   }
-
 }
