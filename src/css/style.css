@@ -1,42 +1,121 @@
+*{
+  padding: 0;margin: 0;font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
 body {
-    color: #999;
+  background-color: #107abb;
+    color: white;
   font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
 }
 .d-none{
   display: none!important;
 }
 .container{
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  margin-bottom: 20px;
+  max-width: 990px;
+  margin: 60px auto;
 }
-.containerGame{
+.row{
   display: flex;
-  flex-wrap: wrap;
-  border: 1px solid black;
-}
-.containerTablo{
-  display: flex;
+  flex-flow: row wrap;
   justify-content: space-between;
-  align-items: center;
-  font-size: 20px;
-  font-weight: bold;
-  color: #777;
 }
-.containerTablo span, .count{
-  font-size: 40px;
+.col-4{
+  -webkit-box-flex: 0;
+  flex: 0 0 auto;
+  width: calc(100% / 3 - 12px);
 }
-.item{
-  width: 120px;
-  height: 120px;
-  border: 1px solid black;
+.border-r6{
+  border-radius: 6px;
+}
+.mb-3{
+  margin-bottom: 12px;
+}
+.card{
+  padding: 12px;
+  background-color: #dee2e5;
+  color: #2d4958;
+}
+.card-title{
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.card-item, .card-close{
+  padding: 12px 36px 12px 12px;
+  background-color: white;
+  font-size: 1rem;
+  margin-bottom: 12px;
+  position: relative;
+}
+.btn-remove{
+  font-size: 1rem;
+  line-height: 1rem;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background-color: #dee2e5;
+  padding: 6px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.card-item:hover .btn-remove{
+  opacity: 0.9;
+  cursor: pointer;
+}
+.card-item-success{
+  background-color: #5ca84d;
+  color: white;
+  margin-top: 12px;
+}
+.card-link{
+  color: #2d4958;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 12px;
+}
+.btn{
+  border: none;cursor: pointer;font-weight: 600;
+}
+.btn-text{
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  font-weight: 600;
+  color: #87969f;
+}
+.btn-text:hover{
+  text-decoration: underline;
+}
+.btn-text:before{
+  content: "+  ";
+}
+.form-input{
+  resize: none;
+  width: 100%;
+  padding: 12px;
   box-sizing: border-box;
+  border: none;
 }
-.item.active{
-  background-image: url("https://github.com/netology-code/ahj-homeworks/blob/AHJ-50/dom/pic/goblin.png?raw=true");
-
+.btn-close{
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+  color: #798c97;
+  font-size: 1rem;
 }
-.item.active:hover{
-  cursor: url("../img/hammer.png"), pointer;
+.btn-close:before{
+  content: "✖";
+}
+.btn-sucess{
+  background-color: #5ca84d;
+  padding: 12px;
+  color: white;
 }

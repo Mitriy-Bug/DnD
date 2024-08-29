@@ -1,5 +1,5 @@
 // TODO: write code here
-import Game from "./main";
-const game = new Game();
+import Trello from "./main";
+const trello = new Trello();
 // game.setupGoblins();
 // game.UserClick();

@@ -4,16 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Домашнее задание "Работа с файлами, DnD"</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 </head>
 <body>
-<div class="container containerTablo">
-  <div>Попаданий: <span class="hit">0</span></div>
-  <div>Промахов: <span class="miss">0</span></div>
+<div class="container">
+  <form class="form-add-card d-none">
+    <textarea class="form-input border-r6 mb-3" name="textCard" placeholder="Введите текст вашей задачи" rows="3" required></textarea>
+    <button type="submit" class="btn btn-sucess border-r6">Добавить</button><button type="button" class="btn btn-close border-r6"></button>
+  </form>
+  <div class="row">
+    <div class="col-4">
+      <div class="card card-todo border-r6 ">
+        <div class="card-title">TODO</div>
+        <div class="card-body">
+<!--          <div class="card-item border-r6">-->
+<!--            Welcome to Trello!-->
+<!--          </div>-->
+<!--          <div class="card-item border-r6">-->
+<!--            This is a card-->
+<!--          </div>-->
+<!--          <div class="card-item border-r6">-->
+<!--            This is a another card-->
+<!--          </div>-->
+        </div>
+        <p>
+          <button type="button" class="btn btn-text add-card">Add another card</button>
+        </p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card card-progress border-r6">
+        <div class="card-title">In Progress</div>
+        <div class="card-body">
+<!--          <div class="card-item border-r6">-->
+<!--            Сделать домашнее задание "Работа с файлами, DnD"-->
+<!--          </div>-->
+        </div>
+        <p>
+          <button type="button" class="btn btn-text add-card">Add another card</button>
+        </p>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="card card-done border-r6">
+        <div class="card-title">Done</div>
+        <div class="card-body">
+<!--          <div class="card-item border-r6">-->
+<!--            Пройти курс по JavaScript-->
+<!--          </div>-->
+        </div>
+        <p>
+          <button type="button" class="btn btn-text add-card">Add another card</button>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="container containerCount">
-  До старта игры: <span class="count">5...</span>
-</div>
-<div class="container containerGame"></div>
 </body>
 </html>

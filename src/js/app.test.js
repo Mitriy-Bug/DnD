@@ -1,6 +1,6 @@
-import Game from "./main";
-const game = new Game();
+import Trello from "./main";
+const trello = new Trello();
 test("jsdom", () => {
-  const container = document.querySelector(".containerGame");
+  const container = document.querySelector(".container");
   expect(container).toBeNull();
 });
