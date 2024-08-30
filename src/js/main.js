@@ -22,7 +22,7 @@ export default class Trello {
   }
   buildCard() {
     let col = null;
-    Object.keys(localStorage).sort().forEach(key => {
+    Object.keys(localStorage).forEach(key => {
       let idCard = JSON.parse(localStorage.getItem(key)).parent;
       col = this.CardsTodo;
       if(idCard == 'progress'){
@@ -34,6 +34,7 @@ export default class Trello {
        const newCard = document.createElement('div');
        newCard.classList.add("card-item");
        newCard.classList.add("border-r6");
+       newCard.dataset.id = JSON.parse(localStorage.getItem(key)).id;
        newCard.textContent = JSON.parse(localStorage.getItem(key)).textCard;
        cardBody.insertAdjacentElement("afterbegin", newCard);
     });
@@ -49,7 +50,12 @@ export default class Trello {
     const allbtnCloseItem = document.querySelectorAll(".btn-remove");
     allbtnCloseItem.forEach((itemClose) => {
       itemClose.addEventListener("click", () => {
+        itemClose.parentElement.insertAdjacentHTML("afterEnd", '<div class="card-close card-item-success border-r6">Карточка удалена</div>');
         itemClose.offsetParent.remove();
+        window.localStorage.removeItem(itemClose.parentElement.dataset.id);
+        setTimeout(() => {
+          document.querySelector('.card-item-success').remove();
+        }, 1000);
       })
     })
   }
@@ -75,7 +81,6 @@ export default class Trello {
     }
   }
   addCard(addForm, parent) {
-
     let parentId = 'todo';
     if(parent.classList.contains("card-progress")){
       parentId = 'progress';
@@ -85,22 +90,22 @@ export default class Trello {
     const textCard = addForm.target.textCard.value
         let cardBody = parent.querySelector('.card-body')
         let newCard = document.createElement('div');
+    const allLSCard = window.localStorage.length+1;
         newCard.classList.add("card-item");
         newCard.classList.add("border-r6");
+        newCard.dataset.id = allLSCard;
         newCard.textContent = textCard;
 
         cardBody.insertAdjacentElement("beforeEnd", newCard);
 
         //Добавление в LocalStorage
-        const allLSCard = window.localStorage.length;
+
         const arrValue = JSON.stringify({
           textCard: textCard,
           id: allLSCard,
           parent: parentId,
         });
-        window.localStorage.setItem('card-' + allLSCard, arrValue)
-
-
+        window.localStorage.setItem(allLSCard, arrValue)
         addForm.target.reset();
         addForm.target.classList.add("d-none");
         addForm.target.insertAdjacentHTML("afterEnd", '<div class="card-close card-item-success border-r6">Карточка добавлена</div>');
@@ -108,5 +113,7 @@ export default class Trello {
           document.querySelector('.card-item-success').remove();
         }, 1000);
         document.querySelectorAll(".add-card").forEach((item) => {item.classList.remove("d-none")})
+    this.addBtnDeleteCard();
+    this.deleteCard();
   }
 }
