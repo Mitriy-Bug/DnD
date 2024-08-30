@@ -8,15 +8,17 @@ export default class Trello {
     this.allCards();
     this.buildCard();
     this.addBtnDeleteCard();//Добавление кнопки удаления карточки
-    this.closeFormAddCard = this.formAddCard.querySelector('.btn-close');
-    //закрытие формы ко клику
-    this.closeFormAddCard.addEventListener("click", (e) => {
-      console.log(e.target);
-      this.formAddCard.classList.add("d-none");
-      document.querySelectorAll(".add-card").forEach((item) => {
-        item.classList.remove("d-none")
+    if(this.formAddCard){
+      this.closeFormAddCard = this.formAddCard.querySelector('.btn-close');
+      //закрытие формы ко клику
+      this.closeFormAddCard.addEventListener("click", (e) => {
+        console.log(e.target);
+        this.formAddCard.classList.add("d-none");
+        document.querySelectorAll(".add-card").forEach((item) => {
+          item.classList.remove("d-none")
+        })
       })
-    })
+    }
   }
   buildCard() {
     let col = null;
@@ -56,18 +58,22 @@ export default class Trello {
     this.allItems(this.CardsProgress)
     this.allItems(this.CardsDone)
     this.deleteCard()//Удаление карточки
-    this.formAddCard.addEventListener('submit', (form) => {
-      form.preventDefault();
-      this.addCard(form, this.formAddCard.parentElement)
-    })
+    if(this.formAddCard){
+      this.formAddCard.addEventListener('submit', (form) => {
+        form.preventDefault();
+        this.addCard(form, this.formAddCard.parentElement)
+      })
+    }
   }
   allItems(nameCard) {
-    nameCard.querySelector('.add-card').addEventListener("click", (e) => {
-      e.target.classList.add("d-none");
-      this.formAddCard.classList.remove("d-none");
-      this.formAddCard.reset()
-      nameCard.append(this.formAddCard)
-    })
+    if(nameCard){
+      nameCard.querySelector('.add-card').addEventListener("click", (e) => {
+        e.target.classList.add("d-none");
+        this.formAddCard.classList.remove("d-none");
+        this.formAddCard.reset()
+        nameCard.append(this.formAddCard)
+      })
+    }
   }
   addCard(addForm, parent) {
 
