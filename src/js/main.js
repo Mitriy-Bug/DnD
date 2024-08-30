@@ -8,11 +8,11 @@ export default class Trello {
     this.allCards();
     this.buildCard();
     this.addBtnDeleteCard();//Добавление кнопки удаления карточки
+    this.deleteCard()//Удаление карточки
     if(this.formAddCard){
       this.closeFormAddCard = this.formAddCard.querySelector('.btn-close');
       //закрытие формы ко клику
       this.closeFormAddCard.addEventListener("click", (e) => {
-        console.log(e.target);
         this.formAddCard.classList.add("d-none");
         document.querySelectorAll(".add-card").forEach((item) => {
           item.classList.remove("d-none")
@@ -57,7 +57,6 @@ export default class Trello {
     this.allItems(this.CardsTodo)
     this.allItems(this.CardsProgress)
     this.allItems(this.CardsDone)
-    this.deleteCard()//Удаление карточки
     if(this.formAddCard){
       this.formAddCard.addEventListener('submit', (form) => {
         form.preventDefault();
@@ -109,6 +108,5 @@ export default class Trello {
           document.querySelector('.card-item-success').remove();
         }, 1000);
         document.querySelectorAll(".add-card").forEach((item) => {item.classList.remove("d-none")})
-        this.deleteCard()//Удаление карточки
   }
 }
