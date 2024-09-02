@@ -157,7 +157,8 @@ export default class Trello {
         actualElement.style.left = event.clientX + 'px';
 
       }
-      let items = document.querySelectorAll(col+'.card-body');
+      let items = document.querySelectorAll(col +' .card-body');
+      console.log(items);
         items.forEach((item) => {
           item.addEventListener('mousedown', (e) => {
             e.preventDefault();
