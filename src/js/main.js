@@ -9,6 +9,7 @@ export default class Trello {
     this.buildCard();
     this.addBtnDeleteCard();//Добавление кнопки удаления карточки
     this.deleteCard()//Удаление карточки
+    this.drag_drop('.container'); //Добавление drag and drop
     if(this.formAddCard){
       this.closeFormAddCard = this.formAddCard.querySelector('.btn-close');
       //закрытие формы ко клику
@@ -81,16 +82,19 @@ export default class Trello {
     }
   }
   addCard(addForm, parent) {
+    let razdel = 1;
     let parentId = 'todo';
     if(parent.classList.contains("card-progress")){
       parentId = 'progress';
+      razdel = 2;
     } else if(parent.classList.contains("card-done")){
       parentId = 'done';
+      razdel = 3;
     }
     const textCard = addForm.target.textCard.value
         let cardBody = parent.querySelector('.card-body')
         let newCard = document.createElement('div');
-    const allLSCard = window.localStorage.length+1;
+        const allLSCard = '' + razdel + (window.localStorage.length+1);
         newCard.classList.add("card-item");
         newCard.classList.add("border-r6");
         newCard.dataset.id = allLSCard;
@@ -115,5 +119,64 @@ export default class Trello {
         document.querySelectorAll(".add-card").forEach((item) => {item.classList.remove("d-none")})
     this.addBtnDeleteCard();
     this.deleteCard();
+  }
+
+  rebuildCard(newId,arr, parent){
+    if(arr){
+      const arrValue = JSON.stringify({
+        textCard: arr.textCard,
+        id: arr.id,
+        parent: parent,
+      });
+      window.localStorage.setItem(arr.id, arrValue)
+    }
+  }
+  drag_drop(col) {
+
+    const items = document.querySelector(col).querySelectorAll('.card-body');
+
+    let actualElement;
+    const onMouseUp = (e) => {
+      const mouseUpItem = e.target;
+
+      const oldItem = JSON.parse(localStorage.getItem(actualElement.dataset.id));
+      const newItem = JSON.parse(localStorage.getItem(mouseUpItem.dataset.id));
+
+            console.log(mouseUpItem.closest('.card'));
+      let parentId = 'todo';
+      let parent = mouseUpItem.closest('.card');
+      if(parent.classList.contains("card-progress")){
+        parentId = 'progress';
+      } else if(parent.classList.contains("card-done")){
+        parentId = 'done';
+      }
+      this.rebuildCard(oldItem, newItem, parentId);
+      this.rebuildCard(newItem, oldItem, parentId);
+
+      mouseUpItem.parentElement.insertBefore(actualElement,mouseUpItem);
+
+      actualElement.classList.remove('dragged');
+      actualElement = undefined;
+
+      document.documentElement.removeEventListener('mouseup', onMouseUp);
+      document.documentElement.removeEventListener('mouseover', onMouseOver);
+    }
+    const onMouseOver = (event) => {
+
+      actualElement.style.top = event.clientY + 'px';
+      actualElement.style.left = event.clientX + 'px';
+
+    }
+    items.forEach((item) => {
+      item.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        actualElement = e.target;
+        actualElement.classList.add('dragged');
+
+        document.documentElement.addEventListener('mouseup', onMouseUp);
+        document.documentElement.addEventListener('mouseover', onMouseOver);
+      })
+    })
+
   }
 }
