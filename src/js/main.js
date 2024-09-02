@@ -121,62 +121,55 @@ export default class Trello {
     this.deleteCard();
   }
 
-  rebuildCard(newId,arr, parent){
-    if(arr){
+  rebuildCard(oldItem, newItem){
+    if(oldItem){
       const arrValue = JSON.stringify({
-        textCard: arr.textCard,
-        id: arr.id,
-        parent: parent,
+        textCard: oldItem.textCard,
+        id: oldItem.id,
+        parent: newItem.parent,
       });
-      window.localStorage.setItem(arr.id, arrValue)
+      window.localStorage.setItem(oldItem.id, arrValue)
     }
   }
   drag_drop(col) {
 
-    const items = document.querySelector(col).querySelectorAll('.card-body');
+    if(col){
+      let actualElement;
+      const onMouseUp = (e) => {
+        const mouseUpItem = e.target;
 
-    let actualElement;
-    const onMouseUp = (e) => {
-      const mouseUpItem = e.target;
+        const oldItem = JSON.parse(localStorage.getItem(actualElement.dataset.id));
+        const newItem = JSON.parse(localStorage.getItem(mouseUpItem.dataset.id));
 
-      const oldItem = JSON.parse(localStorage.getItem(actualElement.dataset.id));
-      const newItem = JSON.parse(localStorage.getItem(mouseUpItem.dataset.id));
+        this.rebuildCard(oldItem, newItem);
 
-            console.log(mouseUpItem.closest('.card'));
-      let parentId = 'todo';
-      let parent = mouseUpItem.closest('.card');
-      if(parent.classList.contains("card-progress")){
-        parentId = 'progress';
-      } else if(parent.classList.contains("card-done")){
-        parentId = 'done';
+        mouseUpItem.parentElement.insertBefore(actualElement,mouseUpItem);
+
+        actualElement.classList.remove('dragged');
+        actualElement = undefined;
+
+        document.documentElement.removeEventListener('mouseup', onMouseUp);
+        document.documentElement.removeEventListener('mouseover', onMouseOver);
       }
-      this.rebuildCard(oldItem, newItem, parentId);
-      this.rebuildCard(newItem, oldItem, parentId);
+      const onMouseOver = (event) => {
 
-      mouseUpItem.parentElement.insertBefore(actualElement,mouseUpItem);
+        actualElement.style.top = event.clientY + 'px';
+        actualElement.style.left = event.clientX + 'px';
 
-      actualElement.classList.remove('dragged');
-      actualElement = undefined;
+      }
+      let items = document.querySelectorAll(col+'.card-body');
+        items.forEach((item) => {
+          item.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            actualElement = e.target;
+            actualElement.classList.add('dragged');
 
-      document.documentElement.removeEventListener('mouseup', onMouseUp);
-      document.documentElement.removeEventListener('mouseover', onMouseOver);
+            document.documentElement.addEventListener('mouseup', onMouseUp);
+            document.documentElement.addEventListener('mouseover', onMouseOver);
+          })
+        })
+
     }
-    const onMouseOver = (event) => {
-
-      actualElement.style.top = event.clientY + 'px';
-      actualElement.style.left = event.clientX + 'px';
-
-    }
-    items.forEach((item) => {
-      item.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        actualElement = e.target;
-        actualElement.classList.add('dragged');
-
-        document.documentElement.addEventListener('mouseup', onMouseUp);
-        document.documentElement.addEventListener('mouseover', onMouseOver);
-      })
-    })
 
   }
 }
