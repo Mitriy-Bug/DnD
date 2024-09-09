@@ -39,9 +39,9 @@ export default class Trello {
       }
       const cardBody = col.querySelector(".card-body");
       const newCardOuter = document.createElement("div");
-      newCardOuter.classList.add("card-item-outer", 'border-r6');
+      newCardOuter.classList.add("card-item-outer", "border-r6");
       const newCard = document.createElement("div");
-      newCard.classList.add("card-item", 'border-r6');
+      newCard.classList.add("card-item", "border-r6");
       newCard.dataset.id = JSON.parse(localStorage.getItem(key)).id;
       newCard.textContent = JSON.parse(localStorage.getItem(key)).textCard;
       newCardOuter.insertAdjacentElement("afterbegin", newCard);
@@ -52,7 +52,10 @@ export default class Trello {
     //Добавляем кнопку удаления карточки
     let allCardItems = document.querySelectorAll(".card-item");
     allCardItems.forEach((item) => {
-      item.insertAdjacentHTML("beforeend", '<button type="button" class="btn btn-remove border-r6">✖</button>');
+      item.insertAdjacentHTML(
+        "beforeend",
+        '<button type="button" class="btn btn-remove border-r6">✖</button>',
+      );
     });
   }
   deleteCard() {
@@ -72,7 +75,6 @@ export default class Trello {
     });
   }
   allCards() {
-
     if (this.formAddCard) {
       this.formAddCard.addEventListener("submit", (form) => {
         form.preventDefault();
@@ -83,24 +85,23 @@ export default class Trello {
   addForm() {
     let allBtnAddForm = document.querySelectorAll(".add-card");
     allBtnAddForm.forEach((btnAdd) => {
-
       btnAdd.addEventListener("click", (e) => {
-        let razdel = 'todo';
+        let razdel = "todo";
         if (e.target.classList.contains("add-card-progress")) {
           razdel = "progress";
         } else if (e.target.classList.contains("add-card-done")) {
           razdel = "done";
         }
-        const formInner = document.querySelector(".card-"+razdel);
-          e.target.classList.add("d-none");
-          this.formAddCard.classList.remove("d-none");
-          this.formAddCard.reset();
-         formInner.append(this.formAddCard);
+        const formInner = document.querySelector(".card-" + razdel);
+        e.target.classList.add("d-none");
+        this.formAddCard.classList.remove("d-none");
+        this.formAddCard.reset();
+        formInner.append(this.formAddCard);
       });
     });
   }
   parentRazdel(parent) {
-    if(parent){
+    if (parent) {
       let razdel = 1;
       let parentId = "todo";
       if (parent.classList.contains("card-progress")) {
@@ -112,8 +113,8 @@ export default class Trello {
       }
       let arr = {
         razdel: razdel,
-        parentId: parentId
-      }
+        parentId: parentId,
+      };
       return arr;
     }
   }
@@ -123,10 +124,11 @@ export default class Trello {
     const textCard = addForm.target.textCard.value;
     let cardBody = parent.querySelector(".card-body");
     let newCardOuter = document.createElement("div");
-    newCardOuter.classList.add("card-item-outer", 'border-r6');
+    newCardOuter.classList.add("card-item-outer", "border-r6");
     let newCard = document.createElement("div");
-    const allLSCard = "" + parentRazdel.razdel + (window.localStorage.length + 1);
-    newCard.classList.add("card-item", 'border-r6');
+    const allLSCard =
+      "" + parentRazdel.razdel + (window.localStorage.length + 1);
+    newCard.classList.add("card-item", "border-r6");
     newCard.dataset.id = allLSCard;
     newCard.textContent = textCard;
 
@@ -184,35 +186,33 @@ export default class Trello {
           localStorage.getItem(actualElement.dataset.id),
         );
 
-        if(newItemId == undefined){
+        if (newItemId == undefined) {
           console.log(this.parentRazdel(mouseUpItem.parentElement));
-          if(this.parentRazdel(mouseUpItem.parentElement)){
-            newItemId = this.parentRazdel(mouseUpItem.parentElement).razdel+'1';
+          if (this.parentRazdel(mouseUpItem.parentElement)) {
+            newItemId =
+              this.parentRazdel(mouseUpItem.parentElement).razdel + "1";
             newItem = {
-              id:newItemId,
-              parent:this.parentRazdel(mouseUpItem.parentElement).parentId
-            }
+              id: newItemId,
+              parent: this.parentRazdel(mouseUpItem.parentElement).parentId,
+            };
           }
-
         } else {
-          newItem = JSON.parse(
-            localStorage.getItem(newItemId),
-          );
+          newItem = JSON.parse(localStorage.getItem(newItemId));
         }
         this.rebuildCard(oldItem, newItem);
 
         const parent = mouseUpItem.closest(".card-body");
         const itemBuild = document.createElement("div");
-        itemBuild.classList.add('card-item-outer', 'border-r6');
+        itemBuild.classList.add("card-item-outer", "border-r6");
         itemBuild.insertAdjacentElement("beforeEnd", actualElement);
 
         let referenceElement = mouseUpItem.parentElement;
 
-        if(referenceElement){
-          if(referenceElement.classList.contains("card") === false){
+        if (referenceElement) {
+          if (referenceElement.classList.contains("card") === false) {
             referenceElement.insertAdjacentElement("beforebegin", itemBuild);
           } else {
-            if(parent){
+            if (parent) {
               parent.insertAdjacentElement("beforeEnd", itemBuild);
             }
           }
@@ -225,7 +225,7 @@ export default class Trello {
         this.removeShadow();
         actualElement.parentElement.classList.remove("drag");
         actualElement.classList.remove("dragged");
-        actualElement.style = '';
+        actualElement.style = "";
         actualElement = undefined;
 
         document.documentElement.removeEventListener("mouseup", onMouseUp);
@@ -233,20 +233,19 @@ export default class Trello {
       };
       const onMouseOver = (event) => {
         const mouseOverItem = event.target;
-        if(mouseOverItem.classList.contains("card-item") === true){
+        if (mouseOverItem.classList.contains("card-item") === true) {
           this.removeShadow();
           const shadow = document.createElement("div");
-          shadow.classList.add("shadow", 'bg-gray', 'border-r6');
-          shadow.style.width= widthItem + "px";
-          shadow.style.height= heightItem + "px";
+          shadow.classList.add("shadow", "bg-gray", "border-r6");
+          shadow.style.width = widthItem + "px";
+          shadow.style.height = heightItem + "px";
           mouseOverItem.insertAdjacentElement("beforebegin", shadow);
         }
         actualElement.style.top = event.clientY + "px";
         actualElement.style.left = event.clientX + "px";
-
       };
+      if(items){
         items.addEventListener("mousedown", (e) => {
-
           actualElement = e.target;
 
           widthItem = actualElement.offsetWidth;
@@ -256,25 +255,26 @@ export default class Trello {
             e.preventDefault();
             actualElement.parentElement.classList.add("drag");
             actualElement.classList.add("dragged");
-            actualElement.style.width= widthItem + "px";
-            actualElement.style.height= heightItem + "px";
-            actualElement.style.grabbing = 'grabbing';
+            actualElement.style.width = widthItem + "px";
+            actualElement.style.height = heightItem + "px";
+            actualElement.style.grabbing = "grabbing";
 
-            actualElement.parentElement.style.width= widthItem + "px";
-            actualElement.parentElement.style.height= heightItem + "px";
+            actualElement.parentElement.style.width = widthItem + "px";
+            actualElement.parentElement.style.height = heightItem + "px";
 
             document.documentElement.addEventListener("mouseup", onMouseUp);
             document.documentElement.addEventListener("mouseover", onMouseOver);
           }
         });
+      }
     }
   }
-  removeShadow(){
+  removeShadow() {
     let allShadow = document.querySelectorAll(".shadow");
-      if(allShadow){
-        allShadow.forEach((item) => {
-          item.remove();
-        })
-      }
+    if (allShadow) {
+      allShadow.forEach((item) => {
+        item.remove();
+      });
+    }
   }
 }
