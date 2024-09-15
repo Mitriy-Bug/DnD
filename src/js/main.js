@@ -180,8 +180,7 @@ export default class Trello {
         let newItem = null;
         let newItemId = mouseUpItem.dataset.id;
         if(newItemId === undefined){
-          if (mouseUpItem.classList.contains("shadow", 'card-body')){
-            console.log(mouseUpItem);
+          if (mouseUpItem.classList.contains('shadow','card-body')){
             if(mouseUpItem.previousSibling){
               newItemId = mouseUpItem.previousSibling.dataset.id;
             } else if(mouseUpItem.nextSibling){
@@ -204,16 +203,16 @@ export default class Trello {
         const oldItem = JSON.parse(
           localStorage.getItem(actualElement.dataset.id),
         );
-
-
+//console.log(newItemId);
         if (newItemId === undefined) {
 
           if (this.parentRazdel(mouseUpItem.parentElement)) {
-            newItemId =
-              this.parentRazdel(mouseUpItem.parentElement).razdel + "1";
+            newItemId = this.parentRazdel(mouseUpItem.closest(".card")).razdel + "1";
+            console.log(this.parentRazdel(mouseUpItem.closest(".card")).razdel);
+
             newItem = {
               id: newItemId,
-              parent: this.parentRazdel(mouseUpItem.parentElement).parentId,
+              parent: this.parentRazdel(mouseUpItem.closest(".card")).parentId,
             };
           }
         } else {
