@@ -206,7 +206,7 @@ export default class Trello {
 //console.log(newItemId);
         if (newItemId === undefined) {
 
-          if (this.parentRazdel(mouseUpItem.parentElement)) {
+          if (this.parentRazdel(mouseUpItem.closest(".card"))) {
             newItemId = this.parentRazdel(mouseUpItem.closest(".card")).razdel + "1";
             console.log(this.parentRazdel(mouseUpItem.closest(".card")).razdel);
 
