@@ -15,7 +15,7 @@ body {
   width: 100%;
   max-width: 990px;
   margin: 60px auto;
-  position: relative;
+  /*position: relative;*/
 }
 .row{
   display: flex;
@@ -29,7 +29,7 @@ body {
 }
 .border-r6{
   border-radius: 6px;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 .mb-3{
   margin-bottom: 12px;
@@ -51,17 +51,9 @@ body {
   margin-bottom: 12px;
   text-transform: uppercase;
 }
-.card-item-outer, .shadow{
+.card-item, .shadow{
   position: relative;
   margin-bottom: 12px;
-}
-.card-item-outer.drag::before{
-  content: "";
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: whitesmoke;
 }
 .card-item, .card-close{
   padding: 12px 36px 12px 12px;
@@ -89,7 +81,7 @@ body {
 .card-item-success{
   background-color: #5ca84d;
   color: white;
-  margin-top: 12px;
+  margin: 12px 0;
 }
 .card-link{
   color: #2d4958;
@@ -134,14 +126,27 @@ body {
 .btn-close:before{
   content: "✖";
 }
-.btn-sucess{
+.btn-success{
   background-color: #5ca84d;
   padding: 12px;
   color: white;
 }
 .dragged{
   position: fixed;
-  cursor: grabbing;
   z-index: 999;
   pointer-events: none;
 }
+/*.new-shadow{*/
+/*  !*margin-top: 100%;*!*/
+/*}*/
+/*.new-shadow:before{*/
+/*  content: "";*/
+/*  !*position: absolute;*!*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  background-color: #87969f;*/
+/*  margin-bottom: 12px;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  display: block;*/
+/*}*/

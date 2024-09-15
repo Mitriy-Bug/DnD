@@ -3,7 +3,7 @@ export default class Trello {
     this.cardsTodo = document.querySelector(".card-todo");
     this.cardsProgress = document.querySelector(".card-progress");
     this.cardsDone = document.querySelector(".card-done");
-    this.formAddCard = document.querySelector(".form-add-card");
+    this.formAddCard = document.querySelector(".form-add");
     this.init(); //Инициализация
   }
   init() {
@@ -29,24 +29,24 @@ export default class Trello {
   }
   buildCard() {
     let col = null;
-    Object.keys(localStorage).forEach((key) => {
-      let idCard = JSON.parse(localStorage.getItem(key)).parent;
-      col = this.cardsTodo;
-      if (idCard == "progress") {
-        col = this.cardsProgress;
-      } else if (idCard == "done") {
-        col = this.cardsDone;
-      }
-      const cardBody = col.querySelector(".card-body");
-      const newCardOuter = document.createElement("div");
-      newCardOuter.classList.add("card-item-outer", "border-r6");
-      const newCard = document.createElement("div");
-      newCard.classList.add("card-item", "border-r6");
-      newCard.dataset.id = JSON.parse(localStorage.getItem(key)).id;
-      newCard.textContent = JSON.parse(localStorage.getItem(key)).textCard;
-      newCardOuter.insertAdjacentElement("afterbegin", newCard);
-      cardBody.insertAdjacentElement("afterbegin", newCardOuter);
-    });
+    if(Object.keys(localStorage).length > 0){
+      Object.keys(localStorage).forEach((key) => {
+        let idCard = JSON.parse(localStorage.getItem(key)).parent;
+        col = this.cardsTodo;
+        if (idCard == "progress") {
+          col = this.cardsProgress;
+        } else if (idCard == "done") {
+          col = this.cardsDone;
+        }
+        const cardBody = col.querySelector(".card-body");
+        const newCard = document.createElement("div");
+        newCard.classList.add("card-item", "border-r6");
+        newCard.dataset.id = JSON.parse(localStorage.getItem(key)).id;
+        newCard.textContent = JSON.parse(localStorage.getItem(key)).textCard;
+
+        cardBody.insertAdjacentElement("afterbegin", newCard);
+      });
+    }
   }
   addBtnDeleteCard() {
     //Добавляем кнопку удаления карточки
@@ -84,9 +84,9 @@ export default class Trello {
   }
   addForm() {
     let allBtnAddForm = document.querySelectorAll(".add-card");
+    let razdel = "todo";
     allBtnAddForm.forEach((btnAdd) => {
       btnAdd.addEventListener("click", (e) => {
-        let razdel = "todo";
         if (e.target.classList.contains("add-card-progress")) {
           razdel = "progress";
         } else if (e.target.classList.contains("add-card-done")) {
@@ -123,8 +123,7 @@ export default class Trello {
 
     const textCard = addForm.target.textCard.value;
     let cardBody = parent.querySelector(".card-body");
-    let newCardOuter = document.createElement("div");
-    newCardOuter.classList.add("card-item-outer", "border-r6");
+
     let newCard = document.createElement("div");
     const allLSCard =
       "" + parentRazdel.razdel + (window.localStorage.length + 1);
@@ -132,9 +131,7 @@ export default class Trello {
     newCard.dataset.id = allLSCard;
     newCard.textContent = textCard;
 
-    newCardOuter.insertAdjacentElement("beforeEnd", newCard);
-
-    cardBody.insertAdjacentElement("beforeEnd", newCardOuter);
+    cardBody.insertAdjacentElement("beforeEnd", newCard);
 
     //Добавление в LocalStorage
 
@@ -146,13 +143,13 @@ export default class Trello {
     window.localStorage.setItem(allLSCard, arrValue);
     addForm.target.reset();
     addForm.target.classList.add("d-none");
-    addForm.target.insertAdjacentHTML(
+    cardBody.insertAdjacentHTML(
       "afterEnd",
       '<div class="card-close card-item-success border-r6">Карточка добавлена</div>',
     );
     setTimeout(() => {
       document.querySelector(".card-item-success").remove();
-    }, 1000);
+    }, 800);
     document.querySelectorAll(".add-card").forEach((item) => {
       item.classList.remove("d-none");
     });
@@ -174,20 +171,43 @@ export default class Trello {
     if (col) {
       const items = document.querySelector(col);
 
-      let actualElement = null;
+      let actualElement,shiftX,shiftY = null;
       let widthItem = null;
       let heightItem = null;
       const onMouseUp = (e) => {
         const mouseUpItem = e.target;
+
         let newItem = null;
         let newItemId = mouseUpItem.dataset.id;
+        if(newItemId === undefined){
+          if (mouseUpItem.classList.contains("shadow", 'card-body')){
+            console.log(mouseUpItem);
+            if(mouseUpItem.previousSibling){
+              newItemId = mouseUpItem.previousSibling.dataset.id;
+            } else if(mouseUpItem.nextSibling){
+              newItemId = mouseUpItem.nextSibling.dataset.id;
+            }
+          }
+        }
+
+        if(mouseUpItem.classList.contains("card-item")) {
+            mouseUpItem.insertAdjacentElement("beforebegin", actualElement);
+        }
+        if(mouseUpItem.classList.contains("shadow")) {
+          if(mouseUpItem.previousSibling) {
+            mouseUpItem.previousSibling.insertAdjacentElement("beforebegin", actualElement);
+          } else{
+            mouseUpItem.closest('.card-body').insertAdjacentElement("afterbegin", actualElement);
+          }
+        }
 
         const oldItem = JSON.parse(
           localStorage.getItem(actualElement.dataset.id),
         );
 
-        if (newItemId == undefined) {
-          console.log(this.parentRazdel(mouseUpItem.parentElement));
+
+        if (newItemId === undefined) {
+
           if (this.parentRazdel(mouseUpItem.parentElement)) {
             newItemId =
               this.parentRazdel(mouseUpItem.parentElement).razdel + "1";
@@ -199,73 +219,67 @@ export default class Trello {
         } else {
           newItem = JSON.parse(localStorage.getItem(newItemId));
         }
+
         this.rebuildCard(oldItem, newItem);
 
-        const parent = mouseUpItem.closest(".card-body");
-        const itemBuild = document.createElement("div");
-        itemBuild.classList.add("card-item-outer", "border-r6");
-        itemBuild.insertAdjacentElement("beforeEnd", actualElement);
-
-        let referenceElement = mouseUpItem.parentElement;
-
-        if (referenceElement) {
-          if (referenceElement.classList.contains("card") === false) {
-            referenceElement.insertAdjacentElement("beforebegin", itemBuild);
-          } else {
-            if (parent) {
-              parent.insertAdjacentElement("beforeEnd", itemBuild);
-            }
-          }
-        }
-
-        const drag = document.querySelector(".drag");
-        if (drag) {
-          drag.remove();
-        }
         this.removeShadow();
-        actualElement.parentElement.classList.remove("drag");
         actualElement.classList.remove("dragged");
-        actualElement.style = "";
+        actualElement.removeAttribute("style");
+        document.body.removeAttribute("style");
         actualElement = undefined;
-
         document.documentElement.removeEventListener("mouseup", onMouseUp);
         document.documentElement.removeEventListener("mouseover", onMouseOver);
       };
       const onMouseOver = (event) => {
         const mouseOverItem = event.target;
+        //mouseOverItem - элемент под передвигаемым блоком
+        const shadow = document.createElement("div");
+        shadow.classList.add("shadow", "bg-gray", "border-r6");
+        shadow.style.width = widthItem + "px";
+        shadow.style.height = heightItem + "px";
+
         if (mouseOverItem.classList.contains("card-item") === true) {
           this.removeShadow();
-          const shadow = document.createElement("div");
-          shadow.classList.add("shadow", "bg-gray", "border-r6");
-          shadow.style.width = widthItem + "px";
-          shadow.style.height = heightItem + "px";
           mouseOverItem.insertAdjacentElement("beforebegin", shadow);
+        } else if (mouseOverItem.classList.contains("card-body") === true && mouseOverItem.hasChildNodes() === false) {
+          this.removeShadow();
+          mouseOverItem.insertAdjacentElement("afterbegin", shadow);
         }
-        actualElement.style.top = event.clientY + "px";
-        actualElement.style.left = event.clientX + "px";
       };
+
       if(items){
         items.addEventListener("mousedown", (e) => {
           actualElement = e.target;
-
           widthItem = actualElement.offsetWidth;
           heightItem = actualElement.offsetHeight;
-
           if (actualElement.classList.contains("card-item")) {
             e.preventDefault();
-            actualElement.parentElement.classList.add("drag");
+
+            shiftX = e.clientX - actualElement.getBoundingClientRect().left;
+            shiftY = e.clientY - actualElement.getBoundingClientRect().top;
+
             actualElement.classList.add("dragged");
             actualElement.style.width = widthItem + "px";
             actualElement.style.height = heightItem + "px";
-            actualElement.style.grabbing = "grabbing";
-
-            actualElement.parentElement.style.width = widthItem + "px";
-            actualElement.parentElement.style.height = heightItem + "px";
+            actualElement.style.left = e.pageX - shiftX + "px";
+            actualElement.style.top = e.pageY - shiftY + "px";
+            document.body.style.cursor = "move";
 
             document.documentElement.addEventListener("mouseup", onMouseUp);
             document.documentElement.addEventListener("mouseover", onMouseOver);
           }
+
         });
+        document.addEventListener("mousemove", (e) => {
+          if (actualElement) {
+            if (actualElement.classList.contains("dragged")) {
+              e.preventDefault();
+              actualElement.style.left = e.pageX - shiftX + "px";
+              actualElement.style.top = e.pageY - shiftY + "px";
+              document.body.style.cursor = "move";
+            }
+          }
+        })
       }
     }
   }
